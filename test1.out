@@ -1,0 +1,43 @@
+([30m[10][0m([30m[8][0m([30m[2][0m([31m[1][0m()())([31m[4][0m()()))([30m[9][0m()()))([30m[40][0m([30m[20][0m()())([31m[50][0m([30m[45][0m()())([30m[60][0m()([31m[80][0m()())))))
+
+
+arvore remover (int valor,arvore* raiz, arvore elemento) {
+	if(elemento == NULL)
+		return NULL;
+
+	if(elemento->dado == valor) {
+
+		if(elemento->esq == NULL && elemento->dir == NULL && elemento->cor == PRETO) {
+			arvore duploPreto = (arvore)malloc(sizeof(arvore));
+			duploPreto->cor = DUPLOPRETO;
+		  duploPreto->pai = elemento->pai;
+
+			if(eh_filho_direito(elemento)){
+				elemento->pai->dir = duploPreto;
+			}else{
+				elemento->pai->esq = duploPreto;
+			}
+			elemento->pai = NULL;
+			arvore pai = duploPreto->pai;
+			remover_auxiliar(raiz, duploPreto);
+			return pai;
+		}
+
+		if(elemento->esq == NULL) {
+			return elemento->dir;
+		}
+		if(elemento->dir == NULL) {
+			return elemento->esq;
+		}
+
+		elemento->dado = maior_elemento(elemento->esq);
+		elemento->esq = remover(elemento->dado, raiz, elemento->esq);
+		return elemento;
+	}
+	if(valor > elemento->dado) {
+			elemento->dir = remover(valor, raiz, elemento->dir);
+	} else {
+			elemento->esq = remover(valor, raiz, elemento->esq);
+	}
+	return elemento;
+}
