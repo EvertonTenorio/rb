@@ -147,7 +147,7 @@ void rotacao_simples_esquerda(arvore *raiz, arvore pivo){
 
 enum cor cor(arvore elemento) {
 	enum cor c;
-	if(elemento==NULL || elemento->cor == PRETO)
+	if(elemento == NULL || elemento->cor == PRETO)
 		c = PRETO;
 	else
 		c = VERMELHO;
@@ -259,9 +259,10 @@ void imprimir_elemento(arvore raiz) {
 		printf("\x1b[31m[%d]\x1b[0m", raiz->dado);
 }
 
-arvore remover (int valor, arvore* raiz, arvore elemento) {
+arvore remover (int valor, arvore* raiz) {
 	int v = valor;
 	arvore aux = NULL;
+	arvore elemento = (*raiz);
 
 	while(elemento != NULL){
 
@@ -284,12 +285,12 @@ arvore remover (int valor, arvore* raiz, arvore elemento) {
 			}
 
 			if(elemento->esq == NULL && elemento->dir == NULL && elemento->cor == VERMELHO) {
-				if(eh_filho_direito(elemento)){
-					elemento->pai->dir = NULL;
+				if(eh_filho_esquerdo(elemento)){
+					elemento->pai->esq = NULL;
 					elemento = NULL;
 					break;
 				}else{
-					elemento->pai->esq = NULL;
+					elemento->pai->dir = NULL;
 					elemento = NULL;
 					break;
 				}
@@ -332,6 +333,7 @@ arvore remover (int valor, arvore* raiz, arvore elemento) {
 				continue;
 		}
 	}
+	return (*raiz);
 }
 
 void remover_auxiliar(arvore* raiz, arvore elemento){
@@ -355,6 +357,14 @@ void remover_auxiliar(arvore* raiz, arvore elemento){
 				&& cor(sobrinho_esq(elemento)) == PRETO){
 
 					remover_caso3(elemento);
+					arvore aux = elemento;
+					elemento = elemento->pai;
+					if(eh_filho_direito(aux)){
+						aux->pai->dir = aux->dir;
+					}else{
+						aux->pai->esq = aux->esq;
+					}
+					aux = NULL;
 		}
 
 		if(elemento->pai->cor == VERMELHO && cor(irmao(elemento)) == PRETO && cor(sobrinho_dir(elemento)) == PRETO
@@ -399,7 +409,7 @@ void remover_caso2(arvore* raiz, arvore elemento){
 	elemento->pai->pai->cor = PRETO;
 }
 
-void remover_caso3( arvore elemento){
+void remover_caso3(arvore elemento){
 	elemento->cor = PRETO;
 	elemento->pai->cor = DUPLOPRETO;
 	irmao(elemento)->cor = VERMELHO;
@@ -408,6 +418,11 @@ void remover_caso3( arvore elemento){
 void remover_caso4(arvore elemento){
 	elemento->pai->cor = PRETO;
 	irmao(elemento)->cor = VERMELHO;
+	if (eh_filho_direito(elemento)) {
+		elemento->pai->dir = NULL;
+	}else{
+		elemento->pai->esq = NULL;
+	}
 	elemento = NULL;
 }
 

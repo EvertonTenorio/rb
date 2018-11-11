@@ -23,7 +23,7 @@ int menor_elemento(arvore raiz);
 void pre_order(arvore raiz);
 void pos_order(arvore raiz);
 void in_order(arvore raiz);
-arvore remover (int valor, arvore* raiz, arvore elemento);
+arvore remover (int valor, arvore* raiz);
 void imprimir_elemento(arvore raiz);
 void imprimir(arvore raiz);
 enum cor cor(arvore elemento);
